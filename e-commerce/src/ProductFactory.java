@@ -1,5 +1,7 @@
 import java.time.LocalDate;
 
+import Models.Product;
+
 public class ProductFactory {
 
     public static Product createProduct(String name, double price,int quantity, Double weight, LocalDate date)throws Exception{

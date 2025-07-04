@@ -1,3 +1,4 @@
+package Models;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,11 +17,11 @@ public class Cart {
         CartItem existingItem = items.get(productName);
         
         if (existingItem == null) {
-            // Create new cart item (this will reserve the quantity)
+ 
             CartItem newItem = new CartItem(product, quantity);
             items.put(productName, newItem);
         } else {
-            // Add to existing cart item
+         
             existingItem.increaseQuantity(quantity);
         }
     }
@@ -31,7 +32,7 @@ public class Cart {
             throw new Exception("Product not found in cart: " + productName);
         }
         
-        // Return items to inventory
+
         item.returnToInventory();
         items.remove(productName);
     }
@@ -40,16 +41,16 @@ public class Cart {
         return items.isEmpty();
     }
     
-    // This method returns items to inventory - for abandoned carts
+
     public void clear() throws Exception {
-        // Return all items to inventory before clearing
+      
         for (CartItem item : items.values()) {
             item.returnToInventory();
         }
         items.clear();
     }
     
-    // This method is for checkout - items are sold, not returned
+   
     public void clearAfterCheckout() {
         items.clear();
     }
@@ -61,11 +62,11 @@ public class Cart {
     }
 
     public Map<String, CartItem> getItems() {
-        return items; // For internal use by CheckoutService
+        return items; 
     }
     
     public Map<String, CartItem> getItemsCopy() {
-        return new HashMap<>(items); // For external use
+        return new HashMap<>(items); 
     }
     
     @Override

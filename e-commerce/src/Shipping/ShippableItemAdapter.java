@@ -1,3 +1,6 @@
+package Shipping;
+import Models.Product;
+
 public class ShippableItemAdapter implements ShippableItem {
 
     private Product product;

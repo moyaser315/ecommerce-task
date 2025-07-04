@@ -1,5 +1,12 @@
 import java.util.*;
 
+import Models.Cart;
+import Models.CartItem;
+import Models.Customer;
+import Models.Product;
+import Shipping.ShippableItem;
+import Shipping.ShippableItemAdapter;
+
 public class CheckOut{
     private static final double SHIPPING_RATE_PER_G = 0.005; // 1 KG of cheese = 5 pounds shipping
     private static final double MIN_SHIPPING_FEE = 35.0;
@@ -87,7 +94,6 @@ public class CheckOut{
                 ShippableItemAdapter adapter = (ShippableItemAdapter) item;
                 double itemWeight = item.getWeight();
                 
-                // Format weight display
                 String weightStr;
                 if (itemWeight < 1) {
                     weightStr = String.format("%.0fg", itemWeight * 1000);
@@ -111,7 +117,7 @@ public class CheckOut{
                                    double totalAmount, double remainingBalance) {
         System.out.println("\n** Checkout receipt **");
         
-        // Print each item
+
         for (CartItem item : cart.getItems().values()) {
             System.out.printf("%dx %s $%.2f%n", 
                 item.getQuantity(), 

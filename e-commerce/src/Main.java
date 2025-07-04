@@ -1,5 +1,9 @@
 import java.time.LocalDate;
 
+import Models.Cart;
+import Models.Customer;
+import Models.Product;
+
 public class Main {
     private static Product[] products;
     
