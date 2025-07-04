@@ -11,27 +11,28 @@ public class Cart {
         if (quantity <= 0) {
             throw new Exception("Quantity must be positive");
         }
-        if (!product.isAvailable(quantity)) {
-            throw new Exception("not enough stock for product: " + product.getName());
-        }
 
-        CartItem item = items.get(product.getName());
-        if (item == null) {
-            item = new CartItem(product, quantity);
-            items.put(product.getName(), item);
+        String productName = product.getName();
+        CartItem existingItem = items.get(productName);
+        
+        if (existingItem == null) {
+            // Create new cart item (this will reserve the quantity)
+            CartItem newItem = new CartItem(product, quantity);
+            items.put(productName, newItem);
         } else {
-            if (!product.reduceQuantity(quantity)) {
-                throw new Exception("not enough stock for product: " + product.getName());
-            }
-            item.setQuantity(item.getQuantity() + quantity);
+            // Add to existing cart item
+            existingItem.increaseQuantity(quantity);
         }
     }
+    
     public void remove(String productName) throws Exception {
-        if (!items.containsKey(productName)) {
+        CartItem item = items.get(productName);
+        if (item == null) {
             throw new Exception("Product not found in cart: " + productName);
         }
-        CartItem item = items.get(productName);
-        item.getProduct().increaseQuantity(item.getQuantity());
+        
+        // Return items to inventory
+        item.returnToInventory();
         items.remove(productName);
     }
     
@@ -39,23 +40,33 @@ public class Cart {
         return items.isEmpty();
     }
     
+    // This method returns items to inventory - for abandoned carts
+    public void clear() throws Exception {
+        // Return all items to inventory before clearing
+        for (CartItem item : items.values()) {
+            item.returnToInventory();
+        }
+        items.clear();
+    }
     
-    public void clear() {
+    // This method is for checkout - items are sold, not returned
+    public void clearAfterCheckout() {
         items.clear();
     }
     
     public double getSubtotal() {
-        double subtotal = 0.0;
-        if (items.isEmpty()) {
-            return 0;
-        }
-        for (CartItem item : items.values()) {
-            subtotal += item.getPrice();
-        }
-        return subtotal;
+        return items.values().stream()
+            .mapToDouble(CartItem::getPrice)
+            .sum();
     }
 
-
+    public Map<String, CartItem> getItems() {
+        return items; // For internal use by CheckoutService
+    }
+    
+    public Map<String, CartItem> getItemsCopy() {
+        return new HashMap<>(items); // For external use
+    }
     
     @Override
     public String toString() {
