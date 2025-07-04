@@ -17,7 +17,7 @@ public class Product {
             throw new Exception("Price must be larger than 0");
         }
         if (quantity < 0) {
-            throw new Exception("sotck can't be less than 0");
+            throw new Exception("stock can't be less than 0");
         }
 
         this.name = name;
