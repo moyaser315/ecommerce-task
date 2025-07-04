@@ -78,7 +78,7 @@ public class CheckOut {
     }
     
     private static void ship(List<ShippableItem> items) throws Exception {
-        System.out.println("\n** Shipment notice **");
+        System.out.println("** Shipment notice **");
         double totalWeight = 0;
         
         for (ShippableItem item : items) {
@@ -86,40 +86,49 @@ public class CheckOut {
                 ShippableItemAdapter adapter = (ShippableItemAdapter) item;
                 double itemWeight = item.getWeight();
                 
-                String weightStr;
-                if (itemWeight < 1) {
-                    weightStr = String.format("%.0fg", itemWeight * 1000);
-                } else {
-                    weightStr = String.format("%.1fg", itemWeight);
-                }
-                
-                System.out.printf("%dx %s %s%n", 
+                System.out.printf("%dx %s%n", 
                     adapter.getQuantity(), 
-                    item.getName(), 
-                    weightStr);
+                    item.getName());
+                
+                String weightStr;
+                if (itemWeight >= 1000) {
+                    weightStr = String.format("%.1fkg", itemWeight / 1000);
+                } else {
+                    weightStr = String.format("%.0fg", itemWeight);
+                }
+                System.out.println(weightStr);
                     
                 totalWeight += itemWeight;
             }
         }
         
-        System.out.printf("Total package weight: %.1fg%n", totalWeight);
+        String totalWeightStr;
+        if (totalWeight >= 1) {
+            totalWeightStr = String.format("%.1fkg", totalWeight/1000);
+        } else {
+            totalWeightStr = String.format("%.0fg", totalWeight );
+        }
+        System.out.printf("Total package weight %s%n", totalWeightStr);
     }
     
     private static void printReceipt(Cart cart, double subtotal, double shippingFee, 
                                    double totalAmount, double remainingBalance) {
-        System.out.println("\n** Checkout receipt **");
+        System.out.println("** Checkout receipt **");
         
         for (CartItem item : cart.getItems().values()) {
-            System.out.printf("%dx %s $%.2f%n", 
+            System.out.printf("%dx %s%n", 
                 item.getQuantity(), 
-                item.getProduct().getName(), 
-                item.getPrice());
+                item.getProduct().getName());
+            System.out.printf("%.0f%n", item.getPrice());
         }
         
         System.out.println("----------------------");
-        System.out.printf("Subtotal: $%.2f%n", subtotal);
-        System.out.printf("Shipping: $%.2f%n", shippingFee);
-        System.out.printf("Amount: $%.2f%n", totalAmount);
-        System.out.printf("\nCustomer balance after payment: $%.2f%n", remainingBalance);
+        System.out.println("Subtotal");
+        System.out.printf("%.0f%n", subtotal);
+        System.out.println("Shipping");
+        System.out.printf("%.0f%n", shippingFee);
+        System.out.println("Amount");
+        System.out.printf("%.0f%n", totalAmount);
+        System.out.println();
     }
 }
