@@ -2,13 +2,16 @@ public class CartItem {
     private Product product;
     private int quantity;
 
-    public CartItem(Product product, int quantity) {
+    public CartItem(Product product, int quantity) throws Exception {
+        if (product == null) {
+            throw new Exception("Product cannot be null");
+        }
         this.product = product;
-        this.quantity = quantity;
+        setQuantity(quantity);
     }
 
-    public String getProduct() {
-        return product.getName();
+    public Product getProduct() {
+        return product;
     }
 
     public double getPrice() {
@@ -17,6 +20,19 @@ public class CartItem {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void setQuantity(int quantity) throws Exception {
+        if (quantity <= 0) {
+            throw new Exception("Quantity must be positive");
+        }
+        if (!product.isAvailable(quantity)) {
+            throw new Exception("Not enough stock for product: " + product.getName());
+        }
+        if (!product.reduceQuantity(quantity)) {
+            throw new Exception("Not enough stock for product: " + product.getName());
+        }
+        this.quantity = quantity;
     }
 
     @Override

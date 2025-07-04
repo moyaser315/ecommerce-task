@@ -130,7 +130,7 @@ public class Product {
         
         if(isShippable()){
             if(shippingInfo.shippingDate != null)
-            res+= "shipping Date: "+ shippingInfo.shippingDate;
+            res+= "shipping Date: "+ shippingInfo.getShippingDate() + '\n';
         }
 
         return res;
