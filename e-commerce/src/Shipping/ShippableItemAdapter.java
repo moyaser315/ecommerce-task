@@ -1,12 +1,13 @@
 package Shipping;
-import Models.Product;
+import Models.BaseProduct;
+import Interfaces.Shippable;
 
 public class ShippableItemAdapter implements ShippableItem {
 
-    private Product product;
+    private BaseProduct product;
     private int quantity;
 
-    public ShippableItemAdapter(Product product, int quantity) {
+    public ShippableItemAdapter(BaseProduct product, int quantity) {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }
@@ -28,14 +29,17 @@ public class ShippableItemAdapter implements ShippableItem {
 
     @Override
     public double getWeight() throws Exception {
-        return product.getWeight() * quantity;
+        if (product instanceof Shippable) {
+            return ((Shippable) product).getWeight() * quantity;
+        }
+        throw new Exception("Product is not shippable");
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-    public Product getProduct() {
+    public BaseProduct getProduct() {
         return product;
     }
 }

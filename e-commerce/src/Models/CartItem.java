@@ -1,9 +1,10 @@
 package Models;
+
 public class CartItem {
-    private Product product;
+    private BaseProduct product;
     private int quantity;
 
-    public CartItem(Product product, int quantity) throws Exception {
+    public CartItem(BaseProduct product, int quantity) throws Exception {
         if (product == null) {
             throw new Exception("Product cannot be null");
         }
@@ -17,7 +18,7 @@ public class CartItem {
         increaseQuantity(quantity);
     }
 
-    public Product getProduct() {
+    public BaseProduct getProduct() {
         return product;
     }
 
@@ -28,7 +29,6 @@ public class CartItem {
     public int getQuantity() {
         return quantity;
     }
-
 
     public void increaseQuantity(int additionalQuantity) throws Exception {
         if (additionalQuantity <= 0) {
@@ -50,7 +50,6 @@ public class CartItem {
             throw new Exception("Cannot reduce more than current quantity");
         }
         
-
         product.increaseQuantity(reduceBy);
         this.quantity -= reduceBy;
     }

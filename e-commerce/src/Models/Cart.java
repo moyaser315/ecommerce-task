@@ -5,7 +5,7 @@ import java.util.Map;
 public class Cart {
     private Map<String, CartItem> items = new HashMap<>();
 
-    public void addItem(Product product, int quantity) throws Exception {
+    public void addItem(BaseProduct product, int quantity) throws Exception {
         if (product == null) {
             throw new Exception("Must choose a product");
         }
@@ -17,11 +17,9 @@ public class Cart {
         CartItem existingItem = items.get(productName);
         
         if (existingItem == null) {
- 
             CartItem newItem = new CartItem(product, quantity);
             items.put(productName, newItem);
         } else {
-         
             existingItem.increaseQuantity(quantity);
         }
     }
@@ -32,7 +30,6 @@ public class Cart {
             throw new Exception("Product not found in cart: " + productName);
         }
         
-
         item.returnToInventory();
         items.remove(productName);
     }
@@ -41,16 +38,13 @@ public class Cart {
         return items.isEmpty();
     }
     
-
     public void clear() throws Exception {
-      
         for (CartItem item : items.values()) {
             item.returnToInventory();
         }
         items.clear();
     }
     
-   
     public void clearAfterCheckout() {
         items.clear();
     }
