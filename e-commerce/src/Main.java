@@ -2,10 +2,11 @@ import java.time.LocalDate;
 
 import Models.Cart;
 import Models.Customer;
-import Models.Product;
+import Models.BaseProduct;
+import Interfaces.Shippable;
 
 public class Main {
-    private static Product[] products;
+    private static BaseProduct[] products;
     
     public static void main(String[] args) throws Exception {
         products = createTestProducts();
@@ -82,7 +83,7 @@ public class Main {
     
     private static void testExpiredProduct() throws Exception {
         System.out.println("\n=== Test Case 5: Expired Product ===");
-        Product expiredMilk = ProductFactory.createProduct(
+        BaseProduct expiredMilk = ProductFactory.createProduct(
             "Old Milk", 5.0, 10, 1.0, LocalDate.now().minusDays(5)
         );
         
@@ -94,30 +95,32 @@ public class Main {
             System.out.println("Error adding expired product: " + e.getMessage());
         }
 
-        
         CheckOut.checkout(momo, cart);
         
         cart.clear();
         System.out.println("Milk inventory after failed checkout: " + expiredMilk.getQuantity());
     }
     
-    private static Product[] createTestProducts() throws Exception {
-        Product [] productsTest = new Product [8];
+    private static BaseProduct[] createTestProducts() throws Exception {
+        BaseProduct[] productsTest = new BaseProduct[8];
         productsTest[0] = ProductFactory.createProduct("cheese", 280 ,5 ,1000.0, LocalDate.now().plusYears(2));
         productsTest[1] = ProductFactory.createProduct("TV", 280 ,5 ,800.0, null);
         productsTest[2] = ProductFactory.createProduct("Mobile", 280 ,5 ,180.0, null);
-        productsTest[3] = ProductFactory.createProduct("Scratch card", 280 ,5 ,null, LocalDate.now().plusYears(2));
         // productsTest[4] = ProductFactory.createProduct("", 280 ,5 ,null, LocalDate.now().plusYears(2));
         // productsTest[5] = ProductFactory.createProduct("Scratch card", 0 ,5 ,null, LocalDate.now().plusYears(2));
         // productsTest[6] = ProductFactory.createProduct("Scratch card", 280 ,-1 ,null, LocalDate.now().plusYears(2));
+        productsTest[3] = ProductFactory.createProduct("Scratch card", 280 ,5 ,null, LocalDate.now().plusYears(2));
         productsTest[7] = ProductFactory.createProduct("Scratch card", 280 ,100 ,null, null);
 
-        productsTest[1].setShippingDate(LocalDate.now().plusDays(5));
+        if (productsTest[1] instanceof Shippable) {
+            ((Shippable) productsTest[1]).setShippingDate(LocalDate.now().plusDays(5));
+        }
+        
         return productsTest;
     }
     
     private static void displayProducts() {
-        for (Product product : products) {
+        for (BaseProduct product : products) {
             if (product != null) {
                 System.out.println(product);
             }
