@@ -121,11 +121,19 @@ public class Product {
     
     @Override
     public String toString() {
-        return "name: " + name + '\n' +
+
+        String res ="name: " + name + '\n' +
                "price: " + price + '\n' +
                "quantity: " + quantity + '\n' +
                "shippable: " + isShippable() + '\n' +
                "expirable: " + isExpirable() + '\n';
+        
+        if(isShippable()){
+            if(shippingInfo.shippingDate != null)
+            res+= "shipping Date: "+ shippingInfo.shippingDate;
+        }
+
+        return res;
     }
     
     
